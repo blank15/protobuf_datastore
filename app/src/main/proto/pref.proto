@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package  com.blank.protobufsample.proto;
+
+option java_package = " com.blank.protobufsample";
+option java_multiple_files = true;
+
+message Preference{
+  string  name = 1;
+  string  favorite = 2;
+}
