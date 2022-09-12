@@ -1,6 +1,7 @@
 package com.blank.protobufsample
 
 import androidx.lifecycle.*
+import com.blank.protobufsample.grpc.Book
 import kotlinx.coroutines.launch
 
 class PrefViewModel(
@@ -13,6 +14,9 @@ class PrefViewModel(
     private val _namePref = MutableLiveData<String>()
     val namePref :LiveData<String> get() = _namePref
 
+    private val _listBook = MutableLiveData<List<Book>>()
+    val listBook :LiveData<List<Book>> get() = _listBook
+
      fun saveName(name:String){
         viewModelScope.launch {
             preferencesRepository.updatePref(name)
@@ -22,6 +26,11 @@ class PrefViewModel(
     fun getDataPref() = viewModelScope.launch {
         preferencesRepository.preferencesFlow.collect {
             _namePref.value = it.name
+        }
+    }
+    fun getBook() = viewModelScope.launch {
+        preferencesRepository.getBook().collect{
+         _listBook.value = it.booksList
         }
     }
 }

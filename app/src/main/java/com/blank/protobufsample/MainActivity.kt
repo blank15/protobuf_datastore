@@ -24,8 +24,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val bookService = BookService(GrpcService())
+
         viewModel = ViewModelProvider(this,PrefViewModelFactory(
-            PrefRepository(preferencesStore)
+            PrefRepository(preferencesStore,bookService)
         ))[PrefViewModel::class.java]
 
         viewModel.getDataPref()
@@ -35,6 +37,11 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             btnSave.setOnClickListener {
                 viewModel.saveName(edSaveName.text.toString())
+                viewModel.getBook()
+            }
+
+            btnGetBook.setOnClickListener {
+                viewModel.getBook()
             }
         }
     }
@@ -42,6 +49,9 @@ class MainActivity : AppCompatActivity() {
     private fun observeValue() {
         viewModel.namePref.observe(this) {
             binding.tvName.text = it
+        }
+        viewModel.listBook.observe(this){
+            binding.tvBook.text = it[0].title
         }
     }
 
